@@ -1,10 +1,10 @@
+import Example from "./components/AttendanceAction"
 import "./css/App.css"
 
 function App() {
-
   return (
     <>
-     <h1>App.tsx</h1>
+     <Example />
     </>
   )
 }
