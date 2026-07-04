@@ -26,6 +26,7 @@ async function checkInAsync(dto: CheckInOutDto): Promise<BaseResponse> {
       };
     }
 
+    
     return {
       Data: apiResponse.Data,
       Success: true,

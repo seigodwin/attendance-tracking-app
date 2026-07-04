@@ -16,9 +16,18 @@ function AttendanceAction() {
     checkInOutDto: CheckInOutDto;
   };
 
+  function isValidEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
   async function handleCheckIn({ checkInOutDto }: CheckInOutProps) {
     if (!checkInOutDto.Email || !checkInOutDto.StaffID) {
       setPopup({ message: "Please fill in both Email and Staff ID fields.", type: "error" });
+      return;
+    }
+
+    if (!isValidEmail(checkInOutDto.Email)) {
+      setPopup({ message: "Please enter a valid email address.", type: "error" });
       return;
     }
 
@@ -35,6 +44,11 @@ function AttendanceAction() {
   async function handleCheckOut({ checkInOutDto }: CheckInOutProps) {
     if (!checkInOutDto.Email || !checkInOutDto.StaffID) {
       setPopup({ message: "Please fill in both Email and Staff ID fields.", type: "error" });
+      return;
+    }
+
+    if (!isValidEmail(checkInOutDto.Email)) {
+      setPopup({ message: "Please enter a valid email address.", type: "error" });
       return;
     }
 
