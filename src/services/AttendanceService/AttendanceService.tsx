@@ -1,13 +1,43 @@
 import type { BaseResponse } from "../../utility/BaseResponse";
 import type { CheckInOutDto } from "../../Dtos/AttendanceDtos/CheckInOutDto";
 
-const BASE_API_URL = import.meta.env.VITE_ATTENDANCE_API_URL;
+const BASE_API_URL = import.meta.env.VITE_ATTENDANCE_API_URL || "http://localhost:5155/api/v1/attendance";
 
+async function readApiResponse(response: Response): Promise<BaseResponse> {
+  const responseText = await response.text();
+
+  if (!responseText) {
+    return {
+      Data: null,
+      Success: false,
+      Message: `Request failed with status ${response.status}.`,
+      StatusCode: response.status,
+    };
+  }
+
+  try {
+    const apiResponse = JSON.parse(responseText);
+
+    return {
+      Data: apiResponse?.Data ?? null,
+      Success: apiResponse?.Success ?? false,
+      Message: apiResponse?.Message ?? "No message returned by the server.",
+      StatusCode: response.status,
+    };
+  } catch {
+    return {
+      Data: null,
+      Success: false,
+      Message: responseText,
+      StatusCode: response.status,
+    };
+  }
+}
 
 async function checkInAsync(dto: CheckInOutDto): Promise<BaseResponse> {
 
   try {
-    const response = await fetch(`${BASE_API_URL}/attendance/checkin`, {
+    const response = await fetch(`${BASE_API_URL}/check-in`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,24 +45,7 @@ async function checkInAsync(dto: CheckInOutDto): Promise<BaseResponse> {
       body: JSON.stringify(dto),
     });
 
-    const apiResponse = await response.json();
-
-    if (!apiResponse.Success) {
-      return {
-        Data: null,
-        Success: false,
-        Message: apiResponse.Message,
-        StatusCode: response.status,
-      };
-    }
-
-    
-    return {
-      Data: apiResponse.Data,
-      Success: true,
-      Message: apiResponse.Message,
-      StatusCode: response.status,
-    };
+    return readApiResponse(response);
 
 
   } catch (error) {
@@ -49,7 +62,7 @@ async function checkInAsync(dto: CheckInOutDto): Promise<BaseResponse> {
 async function checkOutAsync(dto: CheckInOutDto): Promise<BaseResponse> {
 
   try {
-    const response = await fetch(`${BASE_API_URL}/attendance/checkout`, {
+    const response = await fetch(`${BASE_API_URL}/check-out`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,23 +70,7 @@ async function checkOutAsync(dto: CheckInOutDto): Promise<BaseResponse> {
       body: JSON.stringify(dto),
     });
 
-    const apiResponse = await response.json();
-
-    if (!apiResponse.Success) {
-      return {
-        Data: null,
-        Success: false,
-        Message: apiResponse.Message,
-        StatusCode: response.status,
-      };
-    }
-
-    return {
-      Data: apiResponse.Data,
-      Success: true,
-      Message: apiResponse.Message,
-      StatusCode: response.status,
-    };
+    return readApiResponse(response);
 
 
   } catch (error) {
