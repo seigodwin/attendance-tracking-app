@@ -2,118 +2,114 @@ import { useState } from "react";
 import { checkInAsync, checkOutAsync } from "../services/AttendanceService/AttendanceService";
 
 function AttendanceAction() {
+  const [email, setEmail] = useState<string>("");
+  const [staffID, setStaffID] = useState<string>("");
 
-const[email, setEmail] = useState<string>("");
-const[staffID, setStaffID] = useState<string>("");
-
-type CheckInOutDto = {
+  type CheckInOutDto = {
     Email: string;
     StaffID: string;
-}
+  };
 
-type CheckInOutProps = {
+  type CheckInOutProps = {
     checkInOutDto: CheckInOutDto;
-}
+  };
 
- async function handleCheckIn({checkInOutDto}: CheckInOutProps) {
-    if(!checkInOutDto.Email || !checkInOutDto.StaffID) {
-        alert("Please fill in both Email and Staff ID fields.");
-        return;
+  async function handleCheckIn({ checkInOutDto }: CheckInOutProps) {
+    if (!checkInOutDto.Email || !checkInOutDto.StaffID) {
+      alert("Please fill in both Email and Staff ID fields.");
+      return;
     }
 
-    let response = await checkInAsync(checkInOutDto);
+    const response = await checkInAsync(checkInOutDto);
 
-    if(!response.Success) {
-        alert(`Check-in failed: ${response.Message}`);
+    if (!response.Success) {
+      alert(`Check-in failed: ${response.Message}`);
+      return;
     }
 
     alert(`Check-in successful: ${response.Message}`);
- }
+  }
 
- async function handleCheckOut({checkInOutDto}: CheckInOutProps) {
-    if(!checkInOutDto.Email || !checkInOutDto.StaffID) {
-        alert("Please fill in both Email and Staff ID fields.");
-        return;
+  async function handleCheckOut({ checkInOutDto }: CheckInOutProps) {
+    if (!checkInOutDto.Email || !checkInOutDto.StaffID) {
+      alert("Please fill in both Email and Staff ID fields.");
+      return;
     }
 
-    let response = await checkOutAsync(checkInOutDto);
-    if(!response.Success) {
-        alert(`Check-out failed: ${response.Message}`);
+    const response = await checkOutAsync(checkInOutDto);
+
+    if (!response.Success) {
+      alert(`Check-out failed: ${response.Message}`);
+      return;
     }
 
     alert(`Check-out successful: ${response.Message}`);
- }
-
+  }
 
   return (
-    <>
-      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Welcome to Early Work</h2>
+    <section className="flex min-h-[calc(100vh-80px)] items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md rounded-[28px] border border-indigo-500/20 bg-slate-900/80 p-6 shadow-xl shadow-indigo-950/30 sm:p-8">
+        <div className="text-center">
+          <h3 className="text-2xl font-semibold text-white">Record Attendance</h3>
+          <p className="mt-2 text-sm text-slate-400">Enter your details to check in or out.</p>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
+        <form className="mt-8 space-y-5">
+          <div>
+            <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="block w-full rounded-2xl border border-white/10 bg-slate-800/80 px-4 py-3 text-base text-white placeholder:text-slate-500 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/30"
+              placeholder="name@company.com"
+            />
+          </div>
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="block text-sm/6 font-medium text-gray-100">
-                  Staff ID
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="staffID"
-                  name="staffID"
-                  type="text"
-                  required
-                  autoComplete="staff-id"
-                  value={staffID}
-                  onChange={(e) => setStaffID(e.target.value)}
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                />
-              </div>
-            </div>
+          <div>
+            <label htmlFor="staffID" className="mb-2 block text-sm font-medium text-slate-200">
+              Staff ID
+            </label>
+            <input
+              id="staffID"
+              name="staffID"
+              type="text"
+              required
+              autoComplete="staff-id"
+              value={staffID}
+              onChange={(e) => setStaffID(e.target.value)}
+              className="block w-full rounded-2xl border border-white/10 bg-slate-800/80 px-4 py-3 text-base text-white placeholder:text-slate-500 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/30"
+              placeholder="Enter staff ID"
+            />
+          </div>
 
-            <div>
-              <button
-                type="submit"
-                onClick={() => handleCheckIn({checkInOutDto: {Email: email, StaffID: staffID}})}
-                className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              >
-                Check in
-              </button>
+          <div className="grid gap-3 pt-2 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => handleCheckIn({ checkInOutDto: { Email: email, StaffID: staffID } })}
+              className="flex w-full justify-center rounded-2xl bg-indigo-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-400"
+            >
+              Check in
+            </button>
 
-              <button
-                type="submit"
-                onClick={() => handleCheckOut({checkInOutDto: {Email: email, StaffID: staffID}})}
-                className="flex w-full justify-center rounded-md bg-yellow-500 px-3 py-1.5 mt-4 text-sm/6 font-semibold text-white hover:bg-yellow-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              >
-                Check Out
-              </button>
-            </div>
-          </form>
-        </div>
+            <button
+              type="button"
+              onClick={() => handleCheckOut({ checkInOutDto: { Email: email, StaffID: staffID } })}
+              className="flex w-full justify-center rounded-2xl bg-amber-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-amber-400"
+            >
+              Check out
+            </button>
+          </div>
+        </form>
       </div>
-    </>
-  )
+    </section>
+  );
 }
 
-export default AttendanceAction
+export default AttendanceAction;
