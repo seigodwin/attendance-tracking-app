@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { checkInAsync, checkOutAsync } from "../services/AttendanceService/AttendanceService";
+import PopupMessage from "./PopupMessage";
 
 function AttendanceAction() {
   const [email, setEmail] = useState<string>("");
   const [staffID, setStaffID] = useState<string>("");
+  const [popup, setPopup] = useState<{ message: string; type: "error" | "success" } | null>(null);
 
   type CheckInOutDto = {
     Email: string;
@@ -16,35 +18,45 @@ function AttendanceAction() {
 
   async function handleCheckIn({ checkInOutDto }: CheckInOutProps) {
     if (!checkInOutDto.Email || !checkInOutDto.StaffID) {
-      alert("Please fill in both Email and Staff ID fields.");
+      setPopup({ message: "Please fill in both Email and Staff ID fields.", type: "error" });
       return;
     }
 
     const response = await checkInAsync(checkInOutDto);
 
     if (!response.Success) {
-      alert(`Check-in failed: ${response.Message}`);
+      setPopup({ message: `Check-in failed: ${response.Message}`, type: "error" });
       return;
     }
 
-    alert(`Check-in successful: ${response.Message}`);
+    setPopup({ message: `Check-in successful: ${response.Message}`, type: "success" });
   }
 
   async function handleCheckOut({ checkInOutDto }: CheckInOutProps) {
     if (!checkInOutDto.Email || !checkInOutDto.StaffID) {
-      alert("Please fill in both Email and Staff ID fields.");
+      setPopup({ message: "Please fill in both Email and Staff ID fields.", type: "error" });
       return;
     }
 
     const response = await checkOutAsync(checkInOutDto);
 
     if (!response.Success) {
-      alert(`Check-out failed: ${response.Message}`);
+      setPopup({ message: `Check-out failed: ${response.Message}`, type: "error" });
       return;
     }
 
-    alert(`Check-out successful: ${response.Message}`);
+    setPopup({ message: `Check-out successful: ${response.Message}`, type: "success" });
   }
+
+  useEffect(() => {
+    if (!popup) return;
+
+    const timer = window.setTimeout(() => {
+      setPopup(null);
+    }, 5000);
+
+    return () => window.clearTimeout(timer);
+  }, [popup]);
 
   return (
     <section className="flex min-h-[calc(100vh-80px)] items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
@@ -54,7 +66,13 @@ function AttendanceAction() {
           <p className="mt-2 text-sm text-slate-400">Enter your details to check in or out.</p>
         </div>
 
-        <form className="mt-8 space-y-5">
+        {popup && <PopupMessage message={popup.message} type={popup.type} />}
+
+        <form className="mt-8 space-y-5"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <div>
             <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">
               Email address

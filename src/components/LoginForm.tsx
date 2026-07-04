@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import PopupMessage from "./PopupMessage";
 
 function LoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -23,25 +25,24 @@ function LoginForm() {
     setPopup({ message: "Password reset instructions will be sent to your email.", type: "success" });
   }
 
+  useEffect(() => {
+    if (!popup) return;
+
+    const timer = window.setTimeout(() => {
+      setPopup(null);
+    }, 5000);
+
+    return () => window.clearTimeout(timer);
+  }, [popup]);
+
   return (
     <section className="flex min-h-[calc(100vh-80px)] items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
       <div className="w-full max-w-md rounded-[28px] border border-indigo-500/20 bg-slate-900/80 p-6 shadow-xl shadow-indigo-950/30 sm:p-8">
         <div className="text-center">
           <h3 className="text-2xl font-semibold text-white">Admin Login</h3>
-          <p className="mt-2 text-sm text-slate-400">Sign in with your email and password.</p>
         </div>
 
-        {popup && (
-          <div
-            className={`mt-6 rounded-2xl border px-4 py-3 text-sm ${
-              popup.type === "error"
-                ? "border-red-400/30 bg-red-500/10 text-red-200"
-                : "border-emerald-400/30 bg-emerald-500/10 text-emerald-200"
-            }`}
-          >
-            {popup.message}
-          </div>
-        )}
+        {popup && <PopupMessage message={popup.message} type={popup.type} />}
 
         <form
           className="mt-8 space-y-5"
@@ -84,6 +85,16 @@ function LoginForm() {
             />
           </div>
 
+          <div className="-mt-2 flex justify-end">
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-sm font-medium text-indigo-300 transition hover:text-indigo-200"
+            >
+              Forgot password?
+            </button>
+          </div>
+
           <div className="pt-2">
             <button
               type="submit"
@@ -92,13 +103,12 @@ function LoginForm() {
               Login
             </button>
 
-            <button
-              type="button"
-              onClick={handleForgotPassword}
-              className="mt-3 text-sm font-medium text-indigo-300 transition hover:text-indigo-200"
+            <Link
+              to="/"
+              className="mt-3 flex items-center justify-center text-sm font-medium text-slate-400 transition hover:text-white"
             >
-              Forgot password?
-            </button>
+              Go back to home page
+            </Link>
           </div>
         </form>
       </div>
