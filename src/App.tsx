@@ -1,10 +1,13 @@
-import Example from "./components/AttendanceAction"
+import { Route, Routes } from "react-router-dom"
 import "./css/App.css"
+import Home from "./pages/Home"
 
 function App() {
-  return (
+  return ( 
     <>
-     <Example />
+     <Routes>
+        <Route path="/" element={<Home />} />
+     </Routes>
     </>
   )
 }

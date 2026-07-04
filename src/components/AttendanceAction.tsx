@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { checkInAsync, checkOutAsync } from "../services/AttendanceService/AttendanceService";
 
 function AttendanceAction() {
 
@@ -14,11 +15,34 @@ type CheckInOutProps = {
     checkInOutDto: CheckInOutDto;
 }
 
- function handleCheckIn({checkInOutDto}: CheckInOutProps) {
+ async function handleCheckIn({checkInOutDto}: CheckInOutProps) {
+    if(!checkInOutDto.Email || !checkInOutDto.StaffID) {
+        alert("Please fill in both Email and Staff ID fields.");
+        return;
+    }
 
+    let response = await checkInAsync(checkInOutDto);
+
+    if(!response.Success) {
+        alert(`Check-in failed: ${response.Message}`);
+    }
+
+    alert(`Check-in successful: ${response.Message}`);
  }
 
- function handleCheckOut({checkInOutDto}: CheckInOutProps) {}
+ async function handleCheckOut({checkInOutDto}: CheckInOutProps) {
+    if(!checkInOutDto.Email || !checkInOutDto.StaffID) {
+        alert("Please fill in both Email and Staff ID fields.");
+        return;
+    }
+
+    let response = await checkOutAsync(checkInOutDto);
+    if(!response.Success) {
+        alert(`Check-out failed: ${response.Message}`);
+    }
+
+    alert(`Check-out successful: ${response.Message}`);
+ }
 
 
   return (
@@ -53,11 +77,6 @@ type CheckInOutProps = {
                 <label className="block text-sm/6 font-medium text-gray-100">
                   Staff ID
                 </label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-400 hover:text-indigo-300">
-                    Forgot Staff ID?
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
