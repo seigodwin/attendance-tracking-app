@@ -1,8 +1,9 @@
 import type { BaseResponse } from "../../utility/BaseResponse";
 import type { CheckInOutDto } from "../../Dtos/AttendanceDtos/CheckInOutDto";
+import type { GetAllQueryParameters } from "../../Dtos/AttendanceDtos/GetAllQueryParameters";
+import { buildQueryParams } from "../../utility/BuildQueryParams";
 
-const BASE_API_URL = import.meta.env.VITE_ATTENDANCE_BASE_API_URL
-
+const BASE_API_URL = import.meta.env.VITE_ATTENDANCE_API_BASE_URL
 
 async function checkInAsync(dto: CheckInOutDto): Promise<BaseResponse> {
 
@@ -21,7 +22,7 @@ async function checkInAsync(dto: CheckInOutDto): Promise<BaseResponse> {
       return {
         Data: null,
         Success: false,
-        Message: errorData?.message || "Failed to check in.",
+        Message: errorData?.message ?? "Failed to check in.",
         StatusCode: response.status,
       };
     }
@@ -30,7 +31,7 @@ async function checkInAsync(dto: CheckInOutDto): Promise<BaseResponse> {
     return {
       Data: data,
       Success: true,
-      Message: data.Message || "Check in successful.",
+      Message: data.Message ?? "Check in successful.",
       StatusCode: response.status,
     };
 
@@ -87,4 +88,44 @@ async function checkOutAsync(dto: CheckInOutDto): Promise<BaseResponse> {
   }
 }
 
-export { checkInAsync, checkOutAsync };
+
+async function getAll(dto: GetAllQueryParameters): Promise<BaseResponse>{
+  
+  const params = buildQueryParams(dto);
+  const url = `${BASE_API_URL}/?${params.toString()}`;
+
+  try{
+
+    const response = await fetch(url);
+
+    if(response.ok){
+      const apiData = await response.json();
+
+      return{
+        Data: apiData.Data,
+        Success: true,
+        Message: apiData.Message ?? "Data retrieved successfully",
+        StatusCode: response.status
+      }
+    }
+
+    const errorApiData = await response.json();
+    return {
+      Data: null,
+      Success: false,
+      Message: errorApiData.Message ?? "Failed to fetch data",
+      StatusCode: response.status
+    }
+  }
+
+  catch(error){
+     return {
+      Data: null,
+      Success: false,
+      Message: error instanceof Error? error.message : "Failed to fetch data",
+      StatusCode:500
+    }
+  }
+}
+
+export { checkInAsync, checkOutAsync, getAll };
