@@ -34,11 +34,11 @@ function AttendanceAction() {
     const response = await checkInAsync(checkInOutDto);
 
     if (!response.Success) {
-      setPopup({ message: `Check-in failed: ${response.Message}`, type: "error" });
+      setPopup({ message: `${response.Message}`, type: "error" });
       return;
     }
 
-    setPopup({ message: `Check-in successful: ${response.Message}`, type: "success" });
+    setPopup({ message: `${response.Message}`, type: "success" });
   }
 
   async function handleCheckOut({ checkInOutDto }: CheckInOutProps) {
@@ -55,11 +55,11 @@ function AttendanceAction() {
     const response = await checkOutAsync(checkInOutDto);
 
     if (!response.Success) {
-      setPopup({ message: `Check-out failed: ${response.Message}`, type: "error" });
+      setPopup({ message: `${response.Message}`, type: "error" });
       return;
     }
 
-    setPopup({ message: `Check-out successful: ${response.Message}`, type: "success" });
+    setPopup({ message: `${response.Message}`, type: "success" });
   }
 
   useEffect(() => {
