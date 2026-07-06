@@ -1,8 +1,8 @@
 import type { BaseResponse } from "../../utility/BaseResponse";
-import type { CheckInOutDto } from "../../Dtos/AttendanceDtos/CheckInOutDto";
-import type { GetAllQueryParameters } from "../../Dtos/AttendanceDtos/GetAllQueryParameters";
+import type { CheckInOutDto } from "../../dtos/AttendanceDtos/CheckInOutDto";
+import type { GetAllQueryParameters } from "../../dtos/AttendanceDtos/GetAllQueryParameters";
 import { buildQueryParams } from "../../utility/BuildQueryParams";
-import type { GetAttendanceResponseDto } from "../../Dtos/AttendanceDtos/GetAttendanceDto";
+import type { GetAttendanceResponseDto } from "../../dtos/AttendanceDtos/GetAttendanceDto";
 
 const BASE_API_URL = import.meta.env.VITE_ATTENDANCE_API_BASE_URL
 

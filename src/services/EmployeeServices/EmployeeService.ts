@@ -1,6 +1,6 @@
-import type { GetEmployeeDto } from "../../Dtos/EmployeeDtos/GetEmployeeDto";
-import type { RegisterEmployeeDto } from "../../Dtos/EmployeeDtos/RegisterEmployeeDto";
-import type { UpdateEmployeeDto } from "../../Dtos/EmployeeDtos/UpdateEmployeeDto";
+import type { GetEmployeeDto } from "../../dtos/EmployeeDtos/GetEmployeeDto";
+import type { RegisterEmployeeDto } from "../../dtos/EmployeeDtos/RegisterEmployeeDto";
+import type { UpdateEmployeeDto } from "../../dtos/EmployeeDtos/UpdateEmployeeDto";
 import type { BaseResponse } from "../../utility/BaseResponse";
 
 const BASE_API_URL = import.meta.env.VITE_EMPLOYEE_API_BASE_URL
@@ -189,7 +189,7 @@ async function Register(dto: RegisterEmployeeDto): Promise<BaseResponse<GetEmplo
             }
         }
 
-          const errorApiResponse: BaseResponse<GetEmployeeDto> = await response.json();
+        const errorApiResponse: BaseResponse<GetEmployeeDto> = await response.json();
         return{
             Data: null,
             Message: errorApiResponse.Message ?? "Registeration failed",
@@ -198,7 +198,6 @@ async function Register(dto: RegisterEmployeeDto): Promise<BaseResponse<GetEmplo
         }
 
     }
-
       catch(error){
         return{
             Data: null,
