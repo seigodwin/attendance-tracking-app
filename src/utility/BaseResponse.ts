@@ -4,4 +4,6 @@ export type BaseResponse<T = null> ={
     Success: boolean;
     Message: string;
     StatusCode?: number;
+    pageNumber?: number;
+    pageSize?: number;
 }

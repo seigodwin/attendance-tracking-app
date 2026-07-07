@@ -1,12 +1,18 @@
 import type { GetAttendanceResponseDto } from "../dtos/AttendanceDtos/GetAttendanceDto";
 import formatTo12Hour from "../utility/FormatTo12Hour";
 
+type PaginationProps = {
+  pageNumber: number;
+  pageSize: number;
+  onPageChange: (pageNumber: number) => void;
+};
+
 type AttendanceTableProps = {
   attendance: GetAttendanceResponseDto[] | null;
   getById: (id: number) => void;
+  pagination: PaginationProps;
 };
-
-function AttendanceTable({ attendance, getById }: AttendanceTableProps) {
+function AttendanceTable({ attendance, getById , pagination}: AttendanceTableProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-md shadow-2xl">
       <div className="overflow-x-auto">
@@ -56,6 +62,35 @@ function AttendanceTable({ attendance, getById }: AttendanceTableProps) {
             )}
           </tbody>
         </table>
+
+        <div className="flex items-center justify-between border-t border-slate-700/50 bg-slate-900/60 px-6 py-4">
+      <button
+        disabled={pagination.pageNumber === 1}
+        onClick={() => pagination.onPageChange(pagination.pageNumber - 1)}
+        className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        Previous
+      </button>
+
+      <div className="flex items-center gap-2 text-sm text-slate-300">
+        <span>Page</span>
+
+        <span className="rounded-lg bg-indigo-500 px-3 py-1 font-semibold text-white">
+          {pagination.pageNumber}
+        </span>
+
+        <span>|</span>
+
+        <span>{pagination.pageSize} per page</span>
+      </div>
+
+      <button
+        onClick={() => pagination.onPageChange(pagination.pageNumber + 1)}
+        className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
+      >
+        Next
+      </button>
+    </div>
       </div>
     </div>
   );

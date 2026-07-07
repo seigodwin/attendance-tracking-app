@@ -6,14 +6,15 @@ import type { GetAllQueryParameters } from "../dtos/AttendanceDtos/GetAllQueryPa
 import type { GetAttendanceResponseDto } from "../dtos/AttendanceDtos/GetAttendanceDto";
 
     function AdminDashboard(){
-    
     const[attendance , setAttendance] = useState<GetAttendanceResponseDto[] | null>([])
     const[queryParameters, setQueryParamters] = useState<GetAllQueryParameters | null>()
+    const [pageNumber, setPageNumber] = useState(1);
+
 
     useEffect(()=>{
         async function fetchAttendance() {
             try{
-                const attendance = await getAll(queryParameters)
+                const attendance = await getAll(queryParameters , pageNumber)
                 if(attendance.Success){
                     setAttendance(attendance.Data)
                 }
@@ -28,10 +29,14 @@ import type { GetAttendanceResponseDto } from "../dtos/AttendanceDtos/GetAttenda
             }
         }
         fetchAttendance();
-    }, [])
+    }, [pageNumber])
 
     async function getEmployeeById(Id: number) {
         await getById(Id);
+    }
+
+    function handlePageChange(page: number){
+        setPageNumber(page);
     }
 
     return (
@@ -39,7 +44,10 @@ import type { GetAttendanceResponseDto } from "../dtos/AttendanceDtos/GetAttenda
     bg-[radial-gradient(circle_at_top_left,_rgba(79,70,229,0.22),_transparent_35%),linear-gradient(135deg,_#020617_0%,_#111827_100%)]
     text-slate-100">
       <Navbar />
-      <AttendanceTable getById={getEmployeeById} attendance={attendance}/>
+      <AttendanceTable attendance={attendance} getById={getById} 
+      pagination={
+        { pageNumber,  pageSize: 10, onPageChange: handlePageChange, }  }
+     />
     </div>
   );
 }

@@ -93,12 +93,15 @@ async function checkOutAsync(dto: CheckInOutDto): Promise<BaseResponse> {
 async function getAll(dto?: GetAllQueryParameters | null, pageNumber: number = 1, pageSize: number = 10)
 : Promise<BaseResponse<GetAttendanceResponseDto[]>>{
   
-  pageNumber < 1 ? 1 : pageNumber
-  pageSize < 1 ? 10 : (pageSize > 30 ? 30 : pageSize)
-  
+  pageNumber = Math.max(1, pageNumber);
+  pageSize = Math.min(Math.max(1, pageSize), 30);
+
   const params = buildQueryParams(dto);
 
-  const url = params ? `${BASE_API_URL}/?${params.toString()}` : `${BASE_API_URL}`;
+  params.set("pageNumber", pageNumber.toString());
+  params.set("pageSize", pageSize.toString());
+
+const url = `${BASE_API_URL}?${params.toString()}`;
 
   try{
 
@@ -112,7 +115,9 @@ async function getAll(dto?: GetAllQueryParameters | null, pageNumber: number = 1
         Data: apiData.data,
         Success: true,
         Message: apiData.message ?? "Data retrieved successfully",
-        StatusCode: response.status
+        StatusCode: response.status,
+        pageNumber: pageNumber,
+        pageSize: pageNumber
       }
     }
 
