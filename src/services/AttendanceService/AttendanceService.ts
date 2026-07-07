@@ -97,7 +97,7 @@ async function getAll(dto?: GetAllQueryParameters | null, pageNumber: number = 1
   pageSize < 1 ? 10 : (pageSize > 30 ? 30 : pageSize)
   
   const params = buildQueryParams(dto);
-  
+
   const url = params ? `${BASE_API_URL}/?${params.toString()}` : `${BASE_API_URL}`;
 
   try{
@@ -106,12 +106,12 @@ async function getAll(dto?: GetAllQueryParameters | null, pageNumber: number = 1
 
     if(response.ok){
 
-      const apiData: BaseResponse<GetAttendanceResponseDto[]> = await response.json();
+      const apiData = await response.json();
 
       return{
-        Data: apiData.Data,
+        Data: apiData.data,
         Success: true,
-        Message: apiData.Message ?? "Data retrieved successfully",
+        Message: apiData.message ?? "Data retrieved successfully",
         StatusCode: response.status
       }
     }

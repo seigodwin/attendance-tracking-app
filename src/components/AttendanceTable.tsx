@@ -1,4 +1,5 @@
 import type { GetAttendanceResponseDto } from "../dtos/AttendanceDtos/GetAttendanceDto";
+import formatTo12Hour from "../utility/FormatTo12Hour";
 
 type AttendanceTableProps = {
   attendance: GetAttendanceResponseDto[] | null;
@@ -25,22 +26,22 @@ function AttendanceTable({ attendance, getById }: AttendanceTableProps) {
             {attendance && attendance.length > 0 ? (
               attendance.map((record) => (
                 <tr
-                  key={record.Id}
+                  key={record.id}
                   className="border-t border-slate-700/50 transition hover:bg-slate-800/40"
                 >
                   <td className="px-6 py-4">
                     <button
-                      onClick={() => getById(record.EmployeeId)}
+                      onClick={() => getById(record.employeeId)}
                       className="font-medium text-indigo-400 hover:text-indigo-300 hover:underline"
                     >
-                      {record.EmployeeFirstName} {record.EmployeeLastName}
+                      {record.employeeFirstName} {record.employeeLastName}
                     </button>
                   </td>
 
-                  <td className="px-6 py-4 text-slate-300">{record.EmployeeDepartment}</td>
-                  <td className="px-6 py-4 text-slate-300">{record.CheckInTime ?? "--"}</td>
-                  <td className="px-6 py-4 text-slate-300">{record.CheckOutTime ?? "--"}</td>
-                  <td className="px-6 py-4 text-slate-300">{record.AttendanceDate}</td>
+                  <td className="px-6 py-4 text-slate-300">{record.employeeDepartment}</td>
+                  <td className="px-6 py-4 text-slate-300">{formatTo12Hour(record.checkInTime)}</td>
+                  <td className="px-6 py-4 text-slate-300">{formatTo12Hour(record.checkOutTime)}</td>
+                  <td className="px-6 py-4 text-slate-300">{record.attendanceDate}</td>
                 </tr>
               ))
             ) : (

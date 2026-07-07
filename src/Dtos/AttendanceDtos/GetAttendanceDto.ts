@@ -1,10 +1,10 @@
 export type GetAttendanceResponseDto = {
-Id: number 
-EmployeeId: number 
-EmployeeFirstName?: string
-EmployeeLastName?: string
-EmployeeDepartment?: string
-CheckInTime?: string
-CheckOutTime?: string
-AttendanceDate?: string
+id: number 
+employeeId: number 
+employeeFirstName?: string
+employeeLastName?: string
+employeeDepartment?: string
+checkInTime?: string
+checkOutTime?: string
+attendanceDate?: string
 } 
