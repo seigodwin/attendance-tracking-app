@@ -90,13 +90,15 @@ async function checkOutAsync(dto: CheckInOutDto): Promise<BaseResponse> {
 }
 
 
-async function getAll(dto: GetAllQueryParameters, pageNumber: number = 1, pageSize: number = 10): Promise<BaseResponse<GetAttendanceResponseDto[]>>{
+async function getAll(dto?: GetAllQueryParameters | null, pageNumber: number = 1, pageSize: number = 10)
+: Promise<BaseResponse<GetAttendanceResponseDto[]>>{
   
   pageNumber < 1 ? 1 : pageNumber
   pageSize < 1 ? 10 : (pageSize > 30 ? 30 : pageSize)
-
+  
   const params = buildQueryParams(dto);
-  const url = `${BASE_API_URL}/?${params.toString()}`;
+  
+  const url = params ? `${BASE_API_URL}/?${params.toString()}` : `${BASE_API_URL}`;
 
   try{
 

@@ -1,5 +1,5 @@
 
-export function buildQueryParams<T extends object>(dto: T): URLSearchParams {
+export function buildQueryParams<T extends object>(dto?: T | null): URLSearchParams {
     if(dto === null || dto === undefined) {
         return new URLSearchParams();
     }

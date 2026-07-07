@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { checkInAsync, checkOutAsync } from "../services/AttendanceService/AttendanceService";
 import PopupMessage from "./PopupMessage";
+import { isValidEmail } from "../utility/IsValidEmail";
 
 function AttendanceAction() {
   const [email, setEmail] = useState<string>("");
@@ -12,15 +13,12 @@ function AttendanceAction() {
     StaffID: string;
   };
 
+  
   type CheckInOutProps = {
     checkInOutDto: CheckInOutDto;
   };
 
-  function isValidEmail(email: string) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  async function handleCheckIn({ checkInOutDto }: CheckInOutProps) {
+   async function handleCheckIn({ checkInOutDto }: CheckInOutProps) {
     if (!checkInOutDto.Email || !checkInOutDto.StaffID) {
       setPopup({ message: "Please fill in both Email and Staff ID fields.", type: "error" });
       return;

@@ -24,7 +24,7 @@ function Navbar() {
             Attendance
           </Link>
           <Link
-            to="/login"
+            to="/dashboard"
             className="rounded-full px-4 py-2 text-sm font-medium text-slate-400 transition hover:bg-white/10 hover:text-white"
 
           >

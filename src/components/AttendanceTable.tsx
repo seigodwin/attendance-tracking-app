@@ -1,74 +1,58 @@
-import { GetAttendanceResponseDto } from "../dtos/GetAttendanceResponseDto";
+import type { GetAttendanceResponseDto } from "../dtos/AttendanceDtos/GetAttendanceDto";
 
 type AttendanceTableProps = {
-  attendance: GetAttendanceResponseDto[];
+  attendance: GetAttendanceResponseDto[] | null;
   getById: (id: number) => void;
 };
 
-function AttendanceTable({
-  attendance,
-  getById,
-}: AttendanceTableProps) {
+function AttendanceTable({ attendance, getById }: AttendanceTableProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-md shadow-2xl">
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead className="bg-slate-800/70">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">
-                Employee
-              </th>
-
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">
-                Department
-              </th>
-
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">
-                Check In
-              </th>
-
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">
-                Check Out
-              </th>
-
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">
-                Date
-              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Employee</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Department</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Check In</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Check Out</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Date</th>
             </tr>
           </thead>
 
           <tbody>
-            {attendance.map((record) => (
-              <tr
-                key={record.Id}
-                className="border-t border-slate-700/50 transition hover:bg-slate-800/40"
-              >
-                <td className="px-6 py-4">
-                  <button
-                    onClick={() => getById(record.EmployeeId)}
-                    className="font-medium text-indigo-400 hover:text-indigo-300 hover:underline"
-                  >
-                    {record.EmployeeFirstName} {record.EmployeeLastName}
-                  </button>
-                </td>
+            {/* Check if attendance exists and has items */}
+            {attendance && attendance.length > 0 ? (
+              attendance.map((record) => (
+                <tr
+                  key={record.Id}
+                  className="border-t border-slate-700/50 transition hover:bg-slate-800/40"
+                >
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => getById(record.EmployeeId)}
+                      className="font-medium text-indigo-400 hover:text-indigo-300 hover:underline"
+                    >
+                      {record.EmployeeFirstName} {record.EmployeeLastName}
+                    </button>
+                  </td>
 
-                <td className="px-6 py-4 text-slate-300">
-                  {record.EmployeeDepartment}
-                </td>
-
-                <td className="px-6 py-4 text-slate-300">
-                  {record.CheckInTime ?? "--"}
-                </td>
-
-                <td className="px-6 py-4 text-slate-300">
-                  {record.CheckOutTime ?? "--"}
-                </td>
-
-                <td className="px-6 py-4 text-slate-300">
-                  {record.AttendanceDate}
+                  <td className="px-6 py-4 text-slate-300">{record.EmployeeDepartment}</td>
+                  <td className="px-6 py-4 text-slate-300">{record.CheckInTime ?? "--"}</td>
+                  <td className="px-6 py-4 text-slate-300">{record.CheckOutTime ?? "--"}</td>
+                  <td className="px-6 py-4 text-slate-300">{record.AttendanceDate}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="px-6 py-12 text-center text-slate-400 border-t border-slate-700/50">
+                  <div className="flex flex-col items-center justify-center space-y-2">
+                    <span className="text-base font-medium">No records found</span>
+                    <span className="text-xs text-slate-500">There is no attendance data to display.</span>
+                  </div>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
