@@ -37,6 +37,7 @@ import type { GetAttendanceResponseDto } from "../dtos/AttendanceDtos/GetAttenda
 
     function handlePageChange(page: number){
         setPageNumber(page);
+        console.log(page);
     }
 
     return (
