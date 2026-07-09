@@ -1,5 +1,5 @@
 
-export type LoginResponseDto = {
+export type LoginRequestDto = {
     userName?: string,
     accessToken?: string,
     refreshToken?: string,

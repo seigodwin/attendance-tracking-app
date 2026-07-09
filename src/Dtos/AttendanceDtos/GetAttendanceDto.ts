@@ -7,6 +7,6 @@ employeeDepartment?: string
 checkInTime?: string
 checkOutTime?: string
 attendanceDate?: string
-pageNumber: number
-pageSize: number
+pageNumber?: number
+pageSize?: number
 } 
