@@ -33,7 +33,6 @@ function AttendanceFilter({ onSearch }: AttendanceFilterProps) {
     onSearch(filters);
   }
 
-
   return (
     <div
       className="

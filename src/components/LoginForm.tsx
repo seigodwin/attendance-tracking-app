@@ -1,22 +1,42 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PopupMessage from "./PopupMessage";
+import Login from "../services/AuthServices/AuthService";
+import type { LoginRequestDto } from "../dtos/AuthDtos/LoginRequestDto";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 
 function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [popup, setPopup] = useState<{ message: string; type: "error" | "success" } | null>(null);
+   const {login} = useAuth();
 
-  async function handleLogin() {
+  async function handleLogin(email: string , password: string) {
     if (!email || !password) {
       setPopup({ message: "Please fill in both Email and Password fields.", type: "error" });
-      return;
+      return
     }
 
-    setPopup({ message: "Login successful. This is a placeholder for your authentication flow.", type: "success" });
+    const dto:LoginRequestDto = {
+      Email: email,
+      Password: password
+    }
+
+    const response = await Login(dto);
+
+    if(response.Success){
+
+        login();
+        setPopup({ message: "Login successful", type: "success" });
+
+        const navigate = useNavigate();
+        navigate("/dashboard");
+    }
   }
 
-  async function handleForgotPassword() {
+  async function handleForgotPassword(email: string) {
     if (!email) {
       setPopup({ message: "Please enter your email address to reset your password.", type: "error" });
       return;
@@ -48,7 +68,7 @@ function LoginForm() {
           className="mt-8 space-y-5"
           onSubmit={(e) => {
             e.preventDefault();
-            handleLogin();
+            handleLogin(email , password);
           }}
         >
           <div>
@@ -88,7 +108,7 @@ function LoginForm() {
           <div className="-mt-2 flex justify-end">
             <button
               type="button"
-              onClick={handleForgotPassword}
+              onClick={() => handleForgotPassword(email)}
               className="text-sm font-medium text-indigo-300 transition hover:text-indigo-200"
             >
               Forgot password?

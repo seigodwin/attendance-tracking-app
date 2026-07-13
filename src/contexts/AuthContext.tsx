@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
+
 type AuthContextType = {
     isAuthenticated: boolean;
     login: () => void;
