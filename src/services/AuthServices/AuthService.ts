@@ -23,27 +23,28 @@ async function Login(dto: LoginRequestDto): Promise<BaseResponse<LoginResponseDt
             const apiResponse: BaseResponse<LoginResponseDto> = await response.json();
 
             return{
-                Data: apiResponse.Data,
-                Success: true,
-                Message: apiResponse.Message ?? "Login success",
+                data: apiResponse.data,
+                success: true,
+                message: apiResponse.message ?? "Login success",
                 StatusCode: response.status
             }
         }
         
-        const errorResponse = await response.json();
+        const errorResponse: BaseResponse<LoginResponseDto> = await response.json();
+
          return{
-                Data: null,
-                Success: false,
-                Message: errorResponse.Message ?? "Login Failed",
+                data: null,
+                success: false,
+                message: errorResponse.message ?? "Login Failed backend",
                 StatusCode: response.status
             }
     }
 
     catch(error){
          return{
-                Data: null,
-                Success: false,
-                Message: error instanceof Error ? error.message : "Failed to login",
+                data: null,
+                success: false,
+                message: error instanceof Error ? error.message : "Failed to login",
                 StatusCode:500
             }
     }

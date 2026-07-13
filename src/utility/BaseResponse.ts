@@ -1,8 +1,8 @@
 
 export type BaseResponse<T = null> ={
-    Data: T | null;
-    Success: boolean;
-    Message: string;
+    data: T | null;
+    success: boolean;
+    message: string;
     StatusCode?: number;
     pageNumber?: number;
     pageSize?: number;

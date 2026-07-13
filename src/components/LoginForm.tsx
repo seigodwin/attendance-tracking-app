@@ -12,6 +12,7 @@ function LoginForm() {
   const [password, setPassword] = useState<string>("");
   const [popup, setPopup] = useState<{ message: string; type: "error" | "success" } | null>(null);
   const {login} = useAuth();
+  const navigate = useNavigate();
 
   async function handleLogin(email: string , password: string) {
     if (!email || !password) {
@@ -26,16 +27,16 @@ function LoginForm() {
 
     const response = await Login(dto);
 
-    if(response.Success){
+    if(response.success){
 
         login();
+
         setPopup({ message: "Login successful", type: "success" });
-        
-        const navigate = useNavigate();
+
         navigate("/dashboard");
     }
 
-    setPopup({ message: response.Message ?? "Login failed ", type: "error" });
+    setPopup({ message: response.message ?? "Login failed ", type: "error" });
   }
 
   async function handleForgotPassword(email: string) {
