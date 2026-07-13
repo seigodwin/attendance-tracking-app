@@ -34,6 +34,8 @@ function LoginForm() {
         const navigate = useNavigate();
         navigate("/dashboard");
     }
+
+    setPopup({ message: response.Message ?? "Login failed ", type: "error" });
   }
 
   async function handleForgotPassword(email: string) {
