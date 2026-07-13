@@ -11,7 +11,7 @@ function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [popup, setPopup] = useState<{ message: string; type: "error" | "success" } | null>(null);
-   const {login} = useAuth();
+  const {login} = useAuth();
 
   async function handleLogin(email: string , password: string) {
     if (!email || !password) {
@@ -30,7 +30,7 @@ function LoginForm() {
 
         login();
         setPopup({ message: "Login successful", type: "success" });
-
+        
         const navigate = useNavigate();
         navigate("/dashboard");
     }

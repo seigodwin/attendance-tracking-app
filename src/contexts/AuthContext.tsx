@@ -1,30 +1,24 @@
 import { createContext, useContext, useState } from "react";
 
-
 type AuthContextType = {
     isAuthenticated: boolean;
     login: () => void;
     logout: () => void;
 };
 
-
 const AuthContext = createContext<AuthContextType | null>(null);
-
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-
     function login() {
         setIsAuthenticated(true);
     }
 
-
     function logout() {
         setIsAuthenticated(false);
     }
-
 
     return (
         <AuthContext.Provider value={{
